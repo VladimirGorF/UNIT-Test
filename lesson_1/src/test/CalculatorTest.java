@@ -1,6 +1,12 @@
-package seminars.first.Calculator;
+package test;
 
+import org.junit.jupiter.api.Test;
 import seminars.first.Calculator.Calculator;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -37,7 +43,8 @@ public class CalculatorTest {
         // Проверка базового функционала с целыми числами, с использованием утверждений:
 //        assert 5 == Calculator.calculation(2, 6, '+');
 //        assert 0 == Calculator.calculation(2, 2, '-');
-//        assert 14 == Calculator.calculation(2, 7, '*');
+//          assert 14 == Calculator.calculation(2, 7, '*');
+//            assert 21 == 21;
 //        assert 2 == Calculator.calculation(100, 50, '/');
 
         // Проверка базового функционала с целыми числами, с использованием утверждений AssertJ:
@@ -81,6 +88,48 @@ public class CalculatorTest {
         assertThat(Calculator.calculatingDiscount(-200, -20)).isGreaterThanOrEqualTo(0);
         assertThat(Calculator.calculatingDiscount(200, -20)).isGreaterThanOrEqualTo(0);
         assertThat(Calculator.calculatingDiscount(200, 120)).isLessThanOrEqualTo(200);
+    }
 
+    @Test
+    void evaluatesExpression() {
+        Calculator calcus = new Calculator();
+        assertThat(calcus.calculation(2, 6, '+')).isEqualTo(8);
+    }
+
+    @Test
+    void illegalOperatore() {
+        Calculator calcus = new Calculator();
+        assertThatThrownBy(() ->
+                Calculator.calculation(8, 4, '_')
+        ).isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void getOperandCompletesCorrectlyWithNumbers() {
+        String testedValue = "9"; // Значение для тестов
+        ByteArrayInputStream in = new
+                ByteArrayInputStream(testedValue.getBytes());
+        InputStream inputStream = System.in; // Сохраняем ссылку на ввод с клавиатуры
+        System.setIn(in); // Подменяем ввод
+        Calculator.getOperand(); // Вызываем метод
+        System.out.println(testedValue); // Для наглядности вывода
+        System.setIn(inputStream); // Подменяем обратно
+    }
+
+    @Test
+    void getOperandCompletesCorrectlyWithNotNumbers() {
+        String testedValue = "k";
+        ByteArrayInputStream in = new
+                ByteArrayInputStream(testedValue.getBytes());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        InputStream inputStream = System.in;
+        System.setIn(in);
+        System.setOut(new PrintStream(out));
+        assertThatThrownBy(() -> Calculator.getOperand())
+                .isInstanceOf(IllegalStateException.class).describedAs("Ошибка в вводимых данных");
+        System.setIn(inputStream);
+        System.setOut(null);
     }
 }
+

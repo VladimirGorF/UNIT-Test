@@ -1,31 +1,59 @@
 package seminars.first.Calculator;
 
+import java.util.Scanner;
+
 public class Calculator {
-//    public static int calculation(int firstOperand, int secondOperand, char operator) {
-//        int result;
-//
-//        switch (operator) {
-//            case '+':
-//                result = firstOperand + secondOperand;
-//                break;
-//            case '-':
-//                result = firstOperand - secondOperand;
-//                break;
-//            case '*':
-//                result = firstOperand * secondOperand;
-//                break;
-//            case '/':
-//                if (secondOperand != 0) {
-//                    result = firstOperand / secondOperand;
-//                    break;
-//                } else {
-//                    throw new ArithmeticException("Division by zero is not possible");
-//                }
-//            default:
-//                throw new IllegalStateException("Unexpected value operator: " + operator);
-//        }
-//        return result;
-//    }
+
+    private static final Scanner scanner = new
+            Scanner(System.in);
+    public static int calculation(int firstOperand, int secondOperand, char operator) {
+        int result;
+
+        switch (operator) {
+            case '+':
+                result = firstOperand + secondOperand;
+                break;
+            case '-':
+                result = firstOperand - secondOperand;
+                break;
+            case '*':
+                result = firstOperand * secondOperand;
+                break;
+            case '/':
+                if (secondOperand != 0) {
+                    result = firstOperand / secondOperand;
+                    break;
+                } else {
+                    throw new ArithmeticException("Division by zero is not possible");
+                }
+            default:
+                throw new IllegalStateException("Unexpected value operator: " + operator);
+        }
+        return result;
+    }
+
+    public static char getOperator() {
+        System.out.println("Введите операцию:");
+        char operation = scanner.next().charAt(0);
+        return operation;
+    }
+    public static int getOperand() {
+        System.out.println("Введите число:");
+        int operand;
+        if (scanner.hasNextInt()) {
+            operand = scanner.nextInt();
+        } else {
+            System.out.println("Вы допустили ошибку при вводе числа. Попробуйте еще раз");
+            if (scanner.hasNext()) {
+                scanner.next();
+                operand = getOperand();
+            } else {
+                throw new IllegalStateException("Ошибка в вводимых данных");
+            }
+        }
+        return operand;
+    }
+
 
     // HW1.1: Придумайте и опишите (можно в псевдокоде) функцию извлечения корня и
     // необходимые проверки для него используя граничные случаи
